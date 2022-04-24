@@ -1,0 +1,6 @@
+"What is the\ndiameter of\nthe earth?", "40.000 km", "6.350 km", "12.700 km", "20.000 m", "C";
+"What is the\ncapital\nof Canada?", "Toronto", "Ottawa", "Montreal", "Quebec", "B";
+"What is\ncos(π)?", "0", "-1", "+1", "1/2", "B";
+"What is the\ncapital\nof Australia?", "Perth", "Melbourne", "Sydney", "Canberra", "D";
+"Northern\nIreland\nbelongs to...?", "England", "Great Britain", "the United\nKingdom", "none of these", "C";
+"... is not a\nneighbouring\ncountry of\nGermany.", "Poland", "Slovakia", "Czechia", "Luxembourg", "B";

@@ -18,6 +18,11 @@ public class Game : MonoBehaviour
         new AnsweredQuestion("... is not a\nneighbouring\ncountry of\nGermany.", "Poland", "Slovakia", "Czechia", "Luxembourg", "B"),
     };
 
+	public GameObject thumb;
+
+	public GameObject plant;
+	private float initialPlantYRotation;
+
     // Question section
     public GameObject question;
     // Answer sections
@@ -40,8 +45,10 @@ public class Game : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         audioSource = GetComponent<AudioSource>();
+		thumb.SetActive(false);		// Hide thumb on start 
+		initialPlantYRotation =  plant.transform.eulerAngles.y;
         SwitchAnswer();
     }
 
@@ -159,20 +166,28 @@ public class Game : MonoBehaviour
     // Change highlight of chosen answer
     // Change score
     // Play sounds
+
     public void Highlight() {
         previousMaterial = selectedBoard.GetComponent<Renderer>().material;
         if (selection.Equals(answeredQuestion[num].Correct)) {
+			if(plant.transform.eulerAngles.y != initialPlantYRotation) {
+				plant.transform.eulerAngles = new Vector3(transform.eulerAngles.x, plant.transform.eulerAngles.y - 10f, transform.eulerAngles.z);
+			}
             selectedBoard.GetComponent<Renderer>().material = highlightCorrect;
             score += 10;
             scoreText.text = "" + score;
             audioSource.PlayOneShot(successSound, 0.7f);
         }
         else {
+			thumb.transform.rotation = Quaternion.Euler(180,0,0);		// Set thumb to "wrong" rotation
+			plant.transform.eulerAngles = new Vector3(transform.eulerAngles.x, plant.transform.eulerAngles.y + 10f, transform.eulerAngles.z);
+
             selectedBoard.GetComponent<Renderer>().material = highlightFalse; 
             score -= 10;
             scoreText.text = "" + score;
             audioSource.PlayOneShot(failureSound, 0.7f);
         }
+		thumb.SetActive(true);
         switch (answeredQuestion[num].Correct) {
             case "A" : correctBoard = answerBoardA; break;
             case "B" : correctBoard = answerBoardB; break;
@@ -186,5 +201,7 @@ public class Game : MonoBehaviour
     public void RestoreBoard() {
         selectedBoard.GetComponent<Renderer>().material = previousMaterial;
         correctBoard.transform.position = previousPositionCorrectAnswer;
+		thumb.SetActive(false); // Hide Thumb again
+		thumb.transform.rotation = Quaternion.Euler(0,0,0);	// Reset thumb rotation
     }
 }
