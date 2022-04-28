@@ -10,6 +10,8 @@ public class VBEngineEventHandler : MonoBehaviour, IVirtualButtonEventHandler
 
 	public UnityEngine.Video.VideoPlayer player;
 	public GameObject ProgressCylinder;
+	private Vector3 initialCylinderWidth;
+	private bool isVideoPlaying = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,9 +20,10 @@ public class VBEngineEventHandler : MonoBehaviour, IVirtualButtonEventHandler
 		VirtualButtonBehaviour[] vbArr = GetComponentsInChildren<VirtualButtonBehaviour> ();
 		foreach (VirtualButtonBehaviour vb in vbArr) {
 			vb.RegisterEventHandler(this);
-			// Debug.Log("--------------------Button registered: " + vb.VirtualButtonName);
-
 		}
+
+		initialCylinderWidth = ProgressCylinder.transform.localScale;
+		Debug.Log("-----------INITIAL WIDTH = " + initialCylinderWidth);
     }
 
 	public void OnButtonPressed (VirtualButtonBehaviour vb)
@@ -50,17 +53,27 @@ public class VBEngineEventHandler : MonoBehaviour, IVirtualButtonEventHandler
 	private void Update() {
 		animateSaturn();
 		animateProgressBar();
+
+		var rendererComponents = GetComponentsInChildren<Renderer>(true);
+        var colliderComponents = GetComponentsInChildren<Collider>(true);
+        var canvasComponents = GetComponentsInChildren<Canvas>(true);
+
+        // Enable rendering:
+        foreach (var component in rendererComponents)
+            component.enabled = true;
 	}
+
 
 	private void animateProgressBar() {
 		float curFrame = (float)player.frame;
 		float totalFrames = (float)player.frameCount;
 		float percent = curFrame/totalFrames;
-
-		Debug.Log("--------------------GetType(curFrame) = " + curFrame.GetType() );
-		Debug.Log("--------------------GetType(totalFrames) = " + totalFrames.GetType() );
-		Debug.Log("--------------------Current Frame = " + curFrame);
-		Debug.Log("--------------------Total Frames = " + totalFrames);
-		Debug.Log("--------------------Percent: " + percent);
+		float yScale = initialCylinderWidth.y * percent;
+	
+		if(percent <=0){
+			ProgressCylinder.transform.localScale = new Vector3(0f, 0f, 0f);
+		} else {
+			ProgressCylinder.transform.localScale = new Vector3(initialCylinderWidth.x, yScale, initialCylinderWidth.z);
+		}
 	}
 }
