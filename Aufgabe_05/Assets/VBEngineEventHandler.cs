@@ -23,7 +23,6 @@ public class VBEngineEventHandler : MonoBehaviour, IVirtualButtonEventHandler
 		}
 
 		initialCylinderWidth = ProgressCylinder.transform.localScale;
-		Debug.Log("-----------INITIAL WIDTH = " + initialCylinderWidth);
     }
 
 	public void OnButtonPressed (VirtualButtonBehaviour vb)
